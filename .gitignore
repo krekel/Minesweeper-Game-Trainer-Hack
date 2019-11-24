@@ -1,6 +1,6 @@
 .vs/
 Debug/
 /Debug
-/*.vcxproj
-/*.vcxproj.*
+*.vcxproj
+*.vcxproj.*
 *.sln
