@@ -6,7 +6,9 @@
 
 
 typedef void(__stdcall* _winFun)(int param1);
+typedef void(__stdcall* _displayMinesFun)(int param1);
 _winFun winFun;
+_displayMinesFun displayMines;
 
 DWORD WINAPI HackThread(HMODULE hModule)
 {
@@ -22,7 +24,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
 	//calling it with NULL also gives you the address of the .exe module
 	moduleBase = (uintptr_t)GetModuleHandle(NULL);
 
-	bool freezeTimer = false, displayMines = false, tilesInert = false, autoWin = false;
+	bool freezeTimer = false, displayGrid = false, tilesInert = false;
 
 	while (true)
 	{
@@ -53,9 +55,9 @@ DWORD WINAPI HackThread(HMODULE hModule)
 		// Display Mines
 		if (GetAsyncKeyState(VK_F2) & 1)
 		{
-			displayMines = !displayMines;
+			displayGrid = !displayGrid;
 
-			if (displayMines)
+			if (displayGrid)
 			{
 
 
@@ -82,13 +84,14 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
 		if (GetAsyncKeyState(VK_F4) & 1)
 		{
-			autoWin = !autoWin;
+			winFun = (_winFun)(moduleBase + 0x347C);
+			winFun(1);
+		}
 
-			if (autoWin)
-			{
-				winFun = (_winFun)(moduleBase + 0x347C);
-				winFun(1);
-			}
+		if (GetAsyncKeyState(VK_F5))
+		{
+			displayMines = (_displayMinesFun)(moduleBase + 0x2f80);
+			displayMines(0xA);
 		}
 
 		Sleep(5);
