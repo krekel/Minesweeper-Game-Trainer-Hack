@@ -52,29 +52,19 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
 		}
 
-		// Display Mines
+		// Display Grid
 		if (GetAsyncKeyState(VK_F2) & 1)
 		{
-			displayGrid = !displayGrid;
+			BYTE* array = (BYTE*)(0x01005340);
 
-			if (displayGrid)
-			{
+			BYTE* height = (BYTE*)0x01005338;
+			BYTE* width = (BYTE*)0x01005334;
+			unsigned int rows = *(height)+2;
+			unsigned int cols = *(width)+2;
+			std::vector<std::vector<BYTE> > grid(27, std::vector<BYTE>(32));
 
-
-				//BYTE grid[27][32];
-				BYTE* array = (BYTE*)(0x01005340);
-
-				BYTE* height = (BYTE*)0x01005338;
-				BYTE* width = (BYTE*)0x01005334;
-				unsigned int rows = *(height)+2;
-				unsigned int cols = *(width)+2;
-				std::vector<std::vector<BYTE> > grid(27, std::vector<BYTE>(32));
-
-				game::fillArray(array, grid, rows, cols);
-				game::displayGrid(grid, rows, cols);
-
-			}
-
+			game::fillArray(array, grid, rows, cols);
+			game::displayGrid(grid, rows, cols);
 		}
 
 		if (GetAsyncKeyState(VK_F3) & 1)

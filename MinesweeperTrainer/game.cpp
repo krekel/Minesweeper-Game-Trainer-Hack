@@ -16,11 +16,20 @@ void game::displayGrid(std::vector<std::vector<BYTE> >& grid, unsigned int rows,
 			else if (val == 0x8f)
 				std::cout << "[*]";
 			else
-				// calc value
-				std::cout << "[" << (int)val << "]";
+			{
+				if ((int)val == 0)
+				{
+					std::cout << "[ ]";
+				}
+				else
+				{
+					std::cout << "[" << (int)val << "]";
+				}
+			}
 		}
-		printf("\n");
+		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 void game::fillArray(BYTE * array, std::vector<std::vector<BYTE> > & grid, unsigned int rows, unsigned int cols)
