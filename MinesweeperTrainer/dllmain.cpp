@@ -5,6 +5,9 @@
 #include "game.h"
 
 
+typedef void(__stdcall* _winFun)(int param1);
+_winFun winFun;
+
 DWORD WINAPI HackThread(HMODULE hModule)
 {
 	//Create Console
@@ -19,15 +22,17 @@ DWORD WINAPI HackThread(HMODULE hModule)
 	//calling it with NULL also gives you the address of the .exe module
 	moduleBase = (uintptr_t)GetModuleHandle(NULL);
 
-	bool freezeTimer = false, displayMines = false, tilesInert = false;
+	bool freezeTimer = false, displayMines = false, tilesInert = false, autoWin = false;
 
 	while (true)
 	{
+		// Quit
 		if (GetAsyncKeyState(VK_END) & 1)
 		{
 			break;
 		}
 
+		// Freeze timer
 		if (GetAsyncKeyState(VK_F1) & 1)
 		{
 			freezeTimer = !freezeTimer;
@@ -45,6 +50,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
 		}
 
+		// Display Mines
 		if (GetAsyncKeyState(VK_F2) & 1)
 		{
 			displayMines = !displayMines;
@@ -72,6 +78,17 @@ DWORD WINAPI HackThread(HMODULE hModule)
 		if (GetAsyncKeyState(VK_F3) & 1)
 		{
 			tilesInert = !tilesInert;
+		}
+
+		if (GetAsyncKeyState(VK_F4) & 1)
+		{
+			autoWin = !autoWin;
+
+			if (autoWin)
+			{
+				winFun = (_winFun)(moduleBase + 0x347C);
+				winFun(1);
+			}
 		}
 
 		Sleep(5);
