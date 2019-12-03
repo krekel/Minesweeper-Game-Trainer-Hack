@@ -1,4 +1,3 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 #include <iostream>
 #include "mem.h"
@@ -57,8 +56,8 @@ DWORD WINAPI HackThread(HMODULE hModule)
 		{
 			BYTE* array = (BYTE*)(0x01005340);
 
-			BYTE* height = (BYTE*)0x01005338;
-			BYTE* width = (BYTE*)0x01005334;
+			DWORD32* height = (DWORD32*)0x01005338;
+			DWORD32* width = (DWORD32*)0x01005334;
 			unsigned int rows = *(height)+2;
 			unsigned int cols = *(width)+2;
 			std::vector<std::vector<BYTE> > grid(27, std::vector<BYTE>(32));

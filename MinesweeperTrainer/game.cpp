@@ -15,16 +15,13 @@ void game::displayGrid(std::vector<std::vector<BYTE> >& grid, unsigned int rows,
 				std::cout << "[#]";
 			else if (val == 0x8f)
 				std::cout << "[*]";
-			else
+			else if ((int)val == 0)
 			{
-				if ((int)val == 0)
-				{
-					std::cout << "[ ]";
-				}
-				else
-				{
-					std::cout << "[" << (int)val << "]";
-				}
+				std::cout << "[ ]";
+			}
+			else 
+			{
+				std::cout << "[" << (int)val << "]";
 			}
 		}
 		std::cout << std::endl;
