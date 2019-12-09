@@ -7,3 +7,6 @@ A simple game trainer for Minesweeper :D
 * Make mine tiles inert [Coming soon!]
 * Auto-win
 * Display mines in game
+
+## Images
+![Console UI](ui.png)
