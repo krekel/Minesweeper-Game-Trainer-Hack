@@ -3,7 +3,7 @@
 #include "mem.h"
 #include "game.h"
 
-
+void displayMenu();
 typedef void(__stdcall* _winFun)(int param1);
 typedef void(__stdcall* _displayMinesFun)(int param1);
 _winFun winFun;
@@ -25,6 +25,8 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
 	bool freezeTimer = false, displayGrid = false, tilesInert = false;
 
+	displayMenu();
+	
 	while (true)
 	{
 		// Quit
@@ -49,6 +51,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
 				mem::Patch((BYTE*)(moduleBase + 0x2ff5), (BYTE*)"\xFF\x05\x9C\x57\x00\x01", 6);
 			}
 
+			displayMenu();
 		}
 
 		// Display Grid
@@ -64,23 +67,28 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
 			game::fillArray(array, grid, rows, cols);
 			game::displayGrid(grid, rows, cols);
+
+			displayMenu();
 		}
 
 		if (GetAsyncKeyState(VK_F3) & 1)
 		{
 			tilesInert = !tilesInert;
+			displayMenu();
 		}
 
 		if (GetAsyncKeyState(VK_F4) & 1)
 		{
 			winFun = (_winFun)(moduleBase + 0x347C);
 			winFun(1);
+			displayMenu();
 		}
 
 		if (GetAsyncKeyState(VK_F5))
 		{
 			displayMines = (_displayMinesFun)(moduleBase + 0x2f80);
 			displayMines(0xA);
+			displayMenu();
 		}
 
 		Sleep(5);
@@ -90,6 +98,12 @@ DWORD WINAPI HackThread(HMODULE hModule)
 	FreeConsole();
 	FreeLibraryAndExitThread(hModule, 0);
 	return 0;
+}
+
+void displayMenu()
+{
+	std::string menu = "[F1] Freeze Timer\n[F2] Display Grid\n[F3] Set Tiles Inert\n[F4] Auto Win\n[F5] Display Mines In Game\n[END] Exit\n\n";
+	std::cout << menu;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
