@@ -37,7 +37,7 @@ DWORD WINAPI HackThread(HMODULE hModule)
 			std::cout << "-----------------------------------------" << std::endl;
 			std::cout << "[F1] Freeze Timer" << " -" << freezeTimer << "-" << std::endl;
 			std::cout << "[F2] Display Grid" << std::endl;
-			std::cout << "[F3] Make tiles inert" << std::endl;
+			std::cout << "[F3] Make mine tiles inert" << std::endl;
 			std::cout << "[F4] Auto-Win" << std::endl;
 			std::cout << "[F5] Display Mines In Game" << std::endl;
 			std::cout << "[End] Exit" << std::endl << std::endl;
