@@ -24,11 +24,26 @@ DWORD WINAPI HackThread(HMODULE hModule)
 	moduleBase = (uintptr_t)GetModuleHandle(NULL);
 
 	bool freezeTimer = false, displayGrid = false, tilesInert = false;
+	bool updateMenu = true;
 
-	displayMenu();
-	
 	while (true)
 	{
+
+		if (updateMenu)
+		{
+			system("cls");
+			std::cout << "-----------------------------------------" << std::endl;
+			std::cout << "	Minesweeper Game Trainer" << std::endl;
+			std::cout << "-----------------------------------------" << std::endl;
+			std::cout << "[F1] Freeze Timer" << " -" << freezeTimer << "-" << std::endl;
+			std::cout << "[F2] Display Grid" << std::endl;
+			std::cout << "[F3] Make tiles inert" << std::endl;
+			std::cout << "[F4] Auto-Win" << std::endl;
+			std::cout << "[F5] Display Mines In Game" << std::endl;
+			std::cout << "[End] Exit" << std::endl << std::endl;
+			updateMenu = false;
+		}
+
 		// Quit
 		if (GetAsyncKeyState(VK_END) & 1)
 		{
@@ -42,21 +57,20 @@ DWORD WINAPI HackThread(HMODULE hModule)
 
 			if (freezeTimer)
 			{
-				std::cout << "Freeze timer [TRUE]\n";
 				mem::Nop((BYTE*)(moduleBase + 0x2ff5), 6);
 			}
 			else
 			{
-				std::cout << "Freeze timer [FALSE]\n";
 				mem::Patch((BYTE*)(moduleBase + 0x2ff5), (BYTE*)"\xFF\x05\x9C\x57\x00\x01", 6);
 			}
 
-			displayMenu();
+			updateMenu = true;
 		}
 
 		// Display Grid
 		if (GetAsyncKeyState(VK_F2) & 1)
 		{
+			displayGrid = !displayGrid;
 			BYTE* array = (BYTE*)(0x01005340);
 
 			DWORD32* height = (DWORD32*)0x01005338;
@@ -68,27 +82,27 @@ DWORD WINAPI HackThread(HMODULE hModule)
 			game::fillArray(array, grid, rows, cols);
 			game::displayGrid(grid, rows, cols);
 
-			displayMenu();
+			updateMenu = false;
 		}
 
 		if (GetAsyncKeyState(VK_F3) & 1)
 		{
 			tilesInert = !tilesInert;
-			displayMenu();
+			updateMenu = true;
 		}
 
 		if (GetAsyncKeyState(VK_F4) & 1)
 		{
 			winFun = (_winFun)(moduleBase + 0x347C);
 			winFun(1);
-			displayMenu();
+			updateMenu = true;
 		}
 
 		if (GetAsyncKeyState(VK_F5))
 		{
 			displayMines = (_displayMinesFun)(moduleBase + 0x2f80);
 			displayMines(0xA);
-			displayMenu();
+			updateMenu = true;
 		}
 
 		Sleep(5);
