@@ -8,5 +8,5 @@ A simple game trainer for Minesweeper :D
 * Auto-win
 * Display mines in game
 
-## Images
-![Console UI](ui.png)
+## DEMO
+![DEMO](s.gif)
